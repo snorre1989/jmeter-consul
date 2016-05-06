@@ -35,7 +35,9 @@ RUN mkdir -p /etc/consul-template/config.d /etc/consul-template/template.d /test
 
 
 ENV CONSUL_WAIT=5s:20s
-ENV CONSUL_HOST=127.0.0.1
+
+#This presumes that container is running at --net=host, which is a good idea re RMI anyway
+ENV CONSUL_HOST=127.0.0.1:8500
 
 ADD jmeter-server-start.sh.tmpl /
 ADD jmeter-start.sh.tmpl /
