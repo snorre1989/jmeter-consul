@@ -11,6 +11,11 @@ JMETER_LOGGING={{ range ls (printf "jmeter/%s/logging.properties" (key_or_defaul
 
 JMETER_PROPS={{ key_or_default (printf "/jmeter/%s/cli" (key_or_default "jmeter/current-test" "default") ) " " }}
 
-$INSTALL_LOCATION/apache-jmeter-${JMETER_VERSION}/bin/jmeter-server $JMETER_PROPS $JMETER_SYS_PROPS $JMETER_LOGGING -n &
+$INSTALL_LOCATION/jmeter/bin/jmeter-server $JMETER_PROPS $JMETER_SYS_PROPS $JMETER_LOGGING -n &
 
 
+# -D[prop_name]=[value] - defines a java system property value.
+# -J[prop name]=[value] - defines a local JMeter property.
+# -G[prop name]=[value] - defines a JMeter property to be sent to all remote servers.
+# -G[propertyfile] - defines a file containing JMeter properties to be sent to all remote servers.
+# -L[category]=[priority] - overrides a logging setting, setting a particular category to the given priority level.
