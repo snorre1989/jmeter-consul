@@ -46,9 +46,7 @@ ENV START_SCRIPT=jmeter-server-start.sh
 
 ENV RMI_HOST=0.0.0.0
 
-
-#CMD  consul-template -reap=true -consul $CONSUL_HOST -template "/$START_SCRIPT.tmpl:/$START_SCRIPT:cat /$START_SCRIPT"
-ENTRYPOINT ["consul-template", "-wait", "5s:20s", "-consul", "127.0.0.1", "-template", \
+ENTRYPOINT ["consul-template", "-wait", "5s:20s", "-consul", "127.0.0.1:8500", "-template", \
             "/jmeter-server-start.sh.tmpl:/jmeter-server-start.sh:killall java; sh /jmeter-server-start.sh"]
 
 # to run/test:
