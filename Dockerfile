@@ -5,17 +5,18 @@ ENV JMETER_VERSION=2.13
 
 ENV INSTALL_LOCATION=/usr/local
 
-ENV JMETER_BINARY=$INSTALL_LOCATION/apache-jmeter-$JMETER_VERSION/bin/jmeter
+ENV JMETER_BINARY=$INSTALL_LOCATION/jmeter/bin/jmeter
 
 # Install JMeter
 RUN cd $INSTALL_LOCATION && \
   wget http://www.mirrorservice.org/sites/ftp.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz && \
   tar xzf apache-jmeter-$JMETER_VERSION.tgz && \
-  rm -f apache-jmeter-$JMETER_VERSION.tgz
+  rm -f apache-jmeter-$JMETER_VERSION.tgz  && \
+  mv apache-jmeter-$JMETER_VERSION jmeter
 
 
 ENV JMETER_PLUGINS_VERSION=1.4.0
-RUN cd $INSTALL_LOCATION/apache-jmeter-$JMETER_VERSION && \
+RUN cd $INSTALL_LOCATION/jmeter && \
       wget http://jmeter-plugins.org/downloads/file/JMeterPlugins-Standard-${JMETER_PLUGINS_VERSION}.zip && \
       wget http://jmeter-plugins.org/downloads/file/JMeterPlugins-Extras-${JMETER_PLUGINS_VERSION}.zip && \
       wget http://jmeter-plugins.org/downloads/file/JMeterPlugins-ExtrasLibs-${JMETER_PLUGINS_VERSION}.zip && \
@@ -40,7 +41,6 @@ ENV CONSUL_WAIT=5s:20s
 ENV CONSUL_HOST=127.0.0.1:8500
 
 ADD jmeter-server-start.sh.tmpl /
-ADD jmeter-start.sh.tmpl /
 
 ENV START_SCRIPT=jmeter-server-start.sh
 
@@ -48,8 +48,8 @@ ENV RMI_HOST=0.0.0.0
 
 
 #CMD  consul-template -reap=true -consul $CONSUL_HOST -template "/$START_SCRIPT.tmpl:/$START_SCRIPT:cat /$START_SCRIPT"
-
-CMD  consul-template -reap=true -wait "$CONSUL_WAIT" -consul $CONSUL_HOST -template "/$START_SCRIPT.tmpl:/$START_SCRIPT:killall java; sh /$START_SCRIPT"
+ENTRYPOINT ["consul-template", "-wait", "5s:20s", "-consul", "127.0.0.1", "-template", \
+            "/jmeter-server-start.sh.tmpl:/jmeter-server-start.sh:killall java; sh /jmeter-server-start.sh"]
 
 # to run/test:
 # docker build -t jmeter . &&  docker run -it --rm --net host -e CONSUL_WAIT="0s" -e CONSUL_HOST=x.x.x.x:8500 jmeter
