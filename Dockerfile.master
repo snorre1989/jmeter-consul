@@ -35,7 +35,7 @@ RUN cd $INSTALL_LOCATION/bin && \
 RUN mkdir -p /etc/consul-template/config.d /etc/consul-template/template.d /tests
 
 
-ENV CONSUL_WAIT=5s:20s
+#ENV CONSUL_WAIT=5s:20s
 
 #This presumes that container is running at --net=host, which is a good idea re RMI anyway
 ENV CONSUL_HOST=127.0.0.1:8500
@@ -47,7 +47,10 @@ ENV START_SCRIPT=jmeter-server-start.sh
 ENV RMI_HOST=0.0.0.0
 
 ENTRYPOINT ["consul-template", "-wait", "5s:20s", "-consul", "127.0.0.1:8500", "-template", \
-            "/jmeter-server-start.sh.tmpl:/jmeter-server-start.sh:killall java; sh /jmeter-server-start.sh"]
+            "/jmeter-server-start.sh.tmpl:/jmeter-master-start.sh:killall java; sh /jmeter-master-start.sh"]
 
 # to run/test:
 # docker build -t jmeter . &&  docker run -it --rm --net host -e CONSUL_WAIT="0s" -e CONSUL_HOST=x.x.x.x:8500 jmeter
+
+#Running in AWS:
+#https://gist.github.com/warnergodfrey/8037420
