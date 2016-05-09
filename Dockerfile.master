@@ -40,7 +40,7 @@ RUN mkdir -p /etc/consul-template/config.d /etc/consul-template/template.d /test
 #This presumes that container is running at --net=host, which is a good idea re RMI anyway
 ENV CONSUL_HOST=127.0.0.1:8500
 
-ADD jmeter-server-start.sh.tmpl /
+ADD jmeter-master-start.sh.tmpl /
 
 ENV START_SCRIPT=jmeter-server-start.sh
 
