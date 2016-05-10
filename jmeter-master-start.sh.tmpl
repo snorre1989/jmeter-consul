@@ -1,24 +1,16 @@
 #/bin/bash
 
-JMETER_USER_PROPS={{ range ls (printf "jmeter/%s/user.properties" (key_or_default "jmeter/current-test" "default") ) }}\
-  -J{{.Key}}={{.Value}}
-{{end}}
+JMETER_USER_PROPS={{ range ls (printf "jmeter/%s/user.properties" (key_or_default "jmeter/current-test" "default") ) }} -J{{.Key}}={{.Value}} {{end}}
 
-JMETER_SYS_PROPS=-Djava.rmi.server.hostname=$RMI_HOST{{ range ls (printf "jmeter/%s/system.properties" (key_or_default "jmeter/current-test" "default") ) }}\
-  -D{{.Key}}={{.Value}}\
-{{end}}
+JMETER_SYS_PROPS=-Djava.rmi.server.hostname=$RMI_HOST "{{ range ls (printf "jmeter/%s/system.properties" (key_or_default "jmeter/current-test" "default") ) }}-D{{.Key}}={{.Value}} {{end}}"
 
-JMETER_LOGGING={{ range ls (printf "jmeter/%s/logging.properties" (key_or_default "jmeter/current-test" "default") ) }}\
-  -L{{.Key}}={{.Value}}\
-{{end}}
+JMETER_LOGGING="{{ range ls (printf "jmeter/%s/logging.properties" (key_or_default "jmeter/current-test" "default") ) }}-L{{.Key}}={{.Value}} {{end}}"
 
-JMETER_PROPS={{ range ls (printf "jmeter/%s/test.properties" (key_or_default "jmeter/current-test" "default") ) }}\
-  -G{{.Key}}={{.Value}}\
-{{end}}
+JMETER_PROPS="{{ range ls (printf "jmeter/%s/test.properties" (key_or_default "jmeter/current-test" "default") ) }}-J{{.Key}}={{.Value}} {{end}}"
 
 JMETER_CLI="{{ key_or_default (printf "/jmeter/%s/cli" (key_or_default "jmeter/current-test" "default") ) " " }}"
 
-$INSTALL_LOCATION/jmeter/bin/jmeter $JMETER_CLI $JMETER_PROPS $JMETER_SYS_PROPS $JMETER_LOGGING  -n
+$INSTALL_LOCATION/jmeter/bin/jmeter $JMETER_CLI $JMETER_PROPS   -n
 
 # Delete running script after java process dies. Makes consul rewrite and thus restart on startup
 rm -- "$0"
