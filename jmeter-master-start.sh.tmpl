@@ -10,6 +10,8 @@ JMETER_PROPS="{{ range ls (printf "jmeter/%s/test.properties" (key_or_default "j
 
 JMETER_CLI="{{ key_or_default (printf "/jmeter/%s/cli" (key_or_default "jmeter/current-test" "default") ) " " }}"
 
+cd /tests
+
 $INSTALL_LOCATION/jmeter/bin/jmeter $JMETER_CLI $JMETER_PROPS   -n
 
 # Delete running script after java process dies. Makes consul rewrite and thus restart on startup
