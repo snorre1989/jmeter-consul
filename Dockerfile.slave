@@ -1,6 +1,6 @@
 FROM java:8-jdk-alpine
 
-ENV JMETER_VERSION=3.0
+ENV JMETER_VERSION=5.1.1
 
 
 ENV INSTALL_LOCATION=/usr/local
@@ -27,6 +27,7 @@ RUN cd $INSTALL_LOCATION/jmeter && \
 ENV CONSUL_TEMPLATE_VERSION=0.14.0
 
 RUN cd $INSTALL_LOCATION/bin && \
+	apk --no-cache add ca-certificates openssl libstdc++ && update-ca-certificates && \
     wget https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
     unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
     rm  consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip

@@ -1,6 +1,6 @@
 FROM java:8-jdk-alpine
 
-ENV JMETER_VERSION=3.0
+ENV JMETER_VERSION=5.1.1
 
 
 ENV INSTALL_LOCATION=/usr/local
